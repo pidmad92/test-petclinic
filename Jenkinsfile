@@ -1,15 +1,22 @@
 pipeline {
-    agent any
+    agent none
     stages {
         stage('Build') {
+            agent {
+                docker { image 'maven:3.8.3-jdk-11-alpine'
+                        reuseNode true}
+            }
             steps {
-                sh 'mvn --version'
                 sh 'mvn clean package -DskipTests=true'
             }
         }
         stage('Test') {
+            agent {
+                docker { image 'maven:3.8.3-jdk-11-alpine'
+                         reuseNode true }
+            }
             steps {
-                sh 'mvn test -Dtest -DfailIfNoTests=false '
+                sh 'mvn test'
             }
         }
     }
